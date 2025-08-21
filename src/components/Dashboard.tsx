@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   FileText, 
   Users, 
@@ -9,8 +10,14 @@ import {
   Plus,
   ArrowUpRight,
   Calendar,
-  Clock
+  Clock,
+  Activity,
+  AlertCircle,
+  CheckCircle,
+  XCircle
 } from "lucide-react";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 const statsCards = [
   {
@@ -47,6 +54,31 @@ const statsCards = [
   }
 ];
 
+// Mock analytics data
+const analyticsData = [
+  { name: 'Jan', posts: 12, views: 2400, comments: 45 },
+  { name: 'Feb', posts: 19, views: 1398, comments: 32 },
+  { name: 'Mar', posts: 15, views: 9800, comments: 67 },
+  { name: 'Apr', posts: 22, views: 3908, comments: 89 },
+  { name: 'May', posts: 18, views: 4800, comments: 54 },
+  { name: 'Jun', posts: 25, views: 3800, comments: 76 }
+];
+
+const chartConfig = {
+  posts: {
+    label: "Posts",
+    color: "hsl(var(--primary))",
+  },
+  views: {
+    label: "Views",
+    color: "hsl(var(--accent))",
+  },
+  comments: {
+    label: "Comments",
+    color: "hsl(var(--success))",
+  },
+};
+
 const recentPosts = [
   {
     title: "Getting Started with React 18",
@@ -78,6 +110,78 @@ const recentPosts = [
   }
 ];
 
+const recentActivity = [
+  {
+    id: 1,
+    type: "post_published",
+    title: "New post published: 'ASA Wins Championship'",
+    user: "Ahmed Benali",
+    time: "2 minutes ago",
+    icon: CheckCircle,
+    color: "text-success"
+  },
+  {
+    id: 2,
+    type: "comment_pending",
+    title: "New comment awaiting moderation",
+    user: "Hassan Alami",
+    time: "15 minutes ago",
+    icon: AlertCircle,
+    color: "text-warning"
+  },
+  {
+    id: 3,
+    type: "user_registered",
+    title: "New user registered",
+    user: "Fatima Zahra",
+    time: "1 hour ago",
+    icon: Users,
+    color: "text-accent"
+  },
+  {
+    id: 4,
+    type: "post_draft",
+    title: "Draft saved: 'Training Camp Updates'",
+    user: "Mohamed Tazi",
+    time: "2 hours ago",
+    icon: FileText,
+    color: "text-muted-foreground"
+  },
+  {
+    id: 5,
+    type: "comment_spam",
+    title: "Comment marked as spam",
+    user: "System",
+    time: "3 hours ago",
+    icon: XCircle,
+    color: "text-destructive"
+  }
+];
+
+const pendingTasks = [
+  {
+    id: 1,
+    title: "Review 5 pending comments",
+    priority: "high",
+    count: 5,
+    href: "/admin/comments"
+  },
+  {
+    id: 2,
+    title: "Approve 3 scheduled posts",
+    priority: "medium",
+    count: 3,
+    href: "/admin/posts"
+  },
+  {
+    id: 3,
+    title: "Update site settings",
+    priority: "low",
+    count: 1,
+    href: "/admin/settings"
+  }
+];
+
 const quickActions = [
   { title: "New Post", icon: FileText, href: "/posts/new", color: "primary" },
   { title: "Add User", icon: Users, href: "/users/new", color: "secondary" },
@@ -85,6 +189,13 @@ const quickActions = [
 ];
 
 export default function Dashboard() {
+  const formatNumber = (num: number) => {
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -134,8 +245,44 @@ export default function Dashboard() {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Posts */}
-        <div className="lg:col-span-2">
+        {/* Main Content - Left Side */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* Analytics Chart */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-foreground">Analytics Overview</h2>
+              <Button variant="outline" size="sm">
+                View Details
+              </Button>
+            </div>
+            
+            <ChartContainer config={chartConfig} className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={analyticsData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="views" 
+                    stroke="var(--color-views)" 
+                    strokeWidth={2}
+                    dot={{ fill: "var(--color-views)" }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="posts" 
+                    stroke="var(--color-posts)" 
+                    strokeWidth={2}
+                    dot={{ fill: "var(--color-posts)" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Card>
+
+          {/* Recent Posts */}
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-foreground">Recent Posts</h2>
@@ -178,10 +325,70 @@ export default function Dashboard() {
               ))}
             </div>
           </Card>
+
+          {/* Recent Activity */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              {recentActivity.map((activity) => {
+                const Icon = activity.icon;
+                return (
+                  <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-secondary/30 transition-custom">
+                    <div className={`p-2 rounded-lg bg-secondary ${activity.color}`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground">{activity.title}</p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-xs text-muted-foreground">by {activity.user}</span>
+                        <span className="text-xs text-muted-foreground">•</span>
+                        <span className="text-xs text-muted-foreground">{activity.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
         </div>
 
-        {/* Quick Actions */}
+        {/* Sidebar - Right Side */}
         <div className="space-y-6">
+          {/* Pending Tasks */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Pending Tasks</h2>
+            <div className="space-y-3">
+              {pendingTasks.map((task) => (
+                <div key={task.id} className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-custom">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">{task.title}</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <Badge 
+                        variant={task.priority === 'high' ? 'destructive' : task.priority === 'medium' ? 'default' : 'secondary'}
+                        className="text-xs"
+                      >
+                        {task.priority}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">{task.count} items</span>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" asChild>
+                    <a href={task.href}>
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Quick Actions */}
           <Card className="p-6">
             <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
             <div className="space-y-3">
@@ -202,9 +409,9 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          {/* Activity Summary */}
+          {/* Today's Summary */}
           <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Today's Activity</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Today's Summary</h2>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">New comments</span>
@@ -221,6 +428,52 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Published posts</span>
                 <span className="text-sm font-medium text-foreground">3</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* System Status */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4">System Status</h2>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Database</span>
+                <Badge className="bg-success/10 text-success">Online</Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Storage</span>
+                <Badge className="bg-success/10 text-success">78% Used</Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Email Service</span>
+                <Badge className="bg-success/10 text-success">Active</Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Backup</span>
+                <Badge className="bg-warning/10 text-warning">2 days ago</Badge>
+              </div>
+            </div>
+          </Card>
+
+          {/* Quick Stats */}
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Quick Stats</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-3 bg-primary/5 rounded-lg">
+                <div className="text-2xl font-bold text-primary">89%</div>
+                <div className="text-xs text-muted-foreground">Engagement</div>
+              </div>
+              <div className="text-center p-3 bg-accent/5 rounded-lg">
+                <div className="text-2xl font-bold text-accent">4.8</div>
+                <div className="text-xs text-muted-foreground">Avg Rating</div>
+              </div>
+              <div className="text-center p-3 bg-success/5 rounded-lg">
+                <div className="text-2xl font-bold text-success">+12%</div>
+                <div className="text-xs text-muted-foreground">Growth</div>
+              </div>
+              <div className="text-center p-3 bg-warning/5 rounded-lg">
+                <div className="text-2xl font-bold text-warning">2.4K</div>
+                <div className="text-xs text-muted-foreground">Subscribers</div>
               </div>
             </div>
           </Card>
