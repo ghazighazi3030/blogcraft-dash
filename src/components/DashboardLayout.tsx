@@ -19,17 +19,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Posts', href: '/posts', icon: FileText },
-  { name: 'Users', href: '/users', icon: Users },
-  { name: 'Categories', href: '/categories', icon: Tags },
-  { name: 'Comments', href: '/comments', icon: MessageSquare },
-  { name: 'Media', href: '/media', icon: Image },
-  { name: 'SEO', href: '/seo', icon: Search },
-  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-  { name: 'Appearance', href: '/appearance', icon: Palette },
-  { name: 'Security', href: '/security', icon: Shield },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Posts', href: '/admin/posts', icon: FileText },
+  { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Categories', href: '/admin/categories', icon: Tags },
+  { name: 'Comments', href: '/admin/comments', icon: MessageSquare },
+  { name: 'Media', href: '/admin/media', icon: Image },
+  { name: 'SEO', href: '/admin/seo', icon: Search },
+  { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+  { name: 'Appearance', href: '/admin/appearance', icon: Palette },
+  { name: 'Security', href: '/admin/security', icon: Shield },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 export default function DashboardLayout() {
@@ -37,8 +37,8 @@ export default function DashboardLayout() {
   const location = useLocation();
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return location.pathname === '/';
+    if (href === '/admin') {
+      return location.pathname === '/admin';
     }
     return location.pathname.startsWith(href);
   };
@@ -133,6 +133,11 @@ export default function DashboardLayout() {
               </div>
               
               <div className="flex items-center space-x-2">
+                <a href="/blog" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm">
+                    View Blog
+                  </Button>
+                </a>
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                   <span className="text-sm font-medium text-primary-foreground">A</span>
                 </div>

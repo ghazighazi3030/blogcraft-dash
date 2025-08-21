@@ -9,6 +9,12 @@ import Posts from "./pages/Posts";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import PublicLayout from "./components/PublicLayout";
+import BlogHome from "./pages/blog/BlogHome";
+import BlogPost from "./pages/blog/BlogPost";
+import BlogCategories from "./pages/blog/BlogCategories";
+import BlogCategoryPage from "./pages/blog/BlogCategoryPage";
+import BlogAbout from "./pages/blog/BlogAbout";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +25,22 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<DashboardLayout />}>
+          {/* Public Blog Routes */}
+          <Route path="/blog" element={<PublicLayout />}>
+            <Route index element={<BlogHome />} />
+            <Route path="post/:slug" element={<BlogPost />} />
+            <Route path="categories" element={<BlogCategories />} />
+            <Route path="category/:slug" element={<BlogCategoryPage />} />
+            <Route path="about" element={<BlogAbout />} />
+          </Route>
+          
+          {/* Redirect root to blog */}
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<BlogHome />} />
+          </Route>
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="posts" element={<Posts />} />
             <Route path="users" element={<Users />} />
@@ -32,6 +53,7 @@ const App = () => (
             <Route path="appearance" element={<div className="p-6"><h1 className="text-2xl font-bold">Appearance - Coming Soon</h1></div>} />
             <Route path="security" element={<div className="p-6"><h1 className="text-2xl font-bold">Security - Coming Soon</h1></div>} />
           </Route>
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
