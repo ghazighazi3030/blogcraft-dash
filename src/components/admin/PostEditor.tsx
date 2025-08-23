@@ -124,6 +124,13 @@ export default function PostEditor({ post, onSave, onCancel }: PostEditorProps) 
   };
 
   const handleSave = (status: string) => {
+    const postData = {
+      ...formData,
+      status,
+      id: post?.id
+    };
+    
+    console.log('Saving post with data:', postData);
     onSave({
       ...formData,
       status,

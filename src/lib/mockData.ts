@@ -1,0 +1,332 @@
+// Mock data store for posts - In real app, this would be Supabase
+let mockPosts = [
+  {
+    id: 1,
+    title: "ASA Wins Championship Final Against Wydad Casablanca",
+    slug: "asa-wins-championship-final-wydad",
+    excerpt: "In a thrilling match that went into extra time, ASA secured their first championship title in over a decade with a spectacular 3-2 victory.",
+    content: `
+      <div class="prose prose-lg max-w-none">
+        <p>In a thrilling match that will be remembered for years to come, ASA secured their first championship title in over a decade with a spectacular 3-2 victory against Wydad Casablanca at the Mohammed V Stadium.</p>
+        
+        <h2>Match Highlights</h2>
+        <p>The match started with high intensity from both sides. ASA took an early lead in the 15th minute through a brilliant strike from Youssef Amrani, who curled the ball into the top corner from 25 yards out.</p>
+        
+        <p>Wydad responded quickly, equalizing just 10 minutes later through their captain Badr Benoun. The first half ended 1-1, setting up what would be an unforgettable second half.</p>
+        
+        <h2>Second Half Drama</h2>
+        <p>The second half saw end-to-end action with both teams creating numerous chances. ASA regained the lead in the 65th minute when striker Ahmed Reda capitalized on a defensive error to slot home from close range.</p>
+        
+        <p>Just when it seemed ASA had secured the victory, Wydad struck back in the 88th minute through a controversial penalty, sending the match into extra time.</p>
+        
+        <h2>Extra Time Glory</h2>
+        <p>In the 105th minute of extra time, substitute Mehdi Alaoui became the hero, scoring the winning goal with a spectacular overhead kick that sent the ASA fans into delirium.</p>
+        
+        <p>This victory marks ASA's return to the top of Moroccan football and validates the hard work put in by coach Rachid Taoussi and his squad throughout the season.</p>
+        
+        <h2>What This Means</h2>
+        <p>This championship win is more than just a trophy – it represents the culmination of years of rebuilding and investment in youth development. The victory also secures ASA's place in next season's CAF Champions League.</p>
+      </div>
+    `,
+    featuredImageUrl: "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
+    author: {
+      name: "Ahmed Benali",
+      bio: "Sports journalist covering ASA for over 10 years",
+      avatar: null
+    },
+    category: {
+      name: "Match Reports",
+      slug: "match-reports"
+    },
+    tags: [
+      { name: "Championship", slug: "championship" },
+      { name: "Victory", slug: "victory" },
+      { name: "Wydad", slug: "wydad" },
+      { name: "Final", slug: "final" }
+    ],
+    status: "published",
+    publishedAt: "2024-01-15T10:00:00Z",
+    updatedAt: "2024-01-15T10:00:00Z",
+    views: 2847,
+    commentsCount: 45,
+    readingTime: 5,
+    metaTitle: "ASA Wins Championship Final Against Wydad Casablanca - Historic Victory",
+    metaDescription: "ASA secured their first championship title in over a decade with a spectacular 3-2 victory against Wydad Casablanca in extra time."
+  },
+  {
+    id: 2,
+    title: "New Signing: Youssef Amrani Joins ASA",
+    slug: "new-signing-youssef-amrani",
+    excerpt: "The talented midfielder from Raja Casablanca brings experience and skill to strengthen our midfield.",
+    content: `
+      <div class="prose prose-lg max-w-none">
+        <p>ASA is delighted to announce the signing of midfielder Youssef Amrani from Raja Casablanca on a three-year deal.</p>
+        
+        <h2>Player Profile</h2>
+        <p>Amrani, 26, brings a wealth of experience having made over 100 appearances for Raja Casablanca and earned 15 caps for the Moroccan national team.</p>
+        
+        <p>Known for his technical ability, vision, and leadership qualities, Amrani will add significant depth to ASA's midfield options for the upcoming season.</p>
+        
+        <h2>Manager's Comments</h2>
+        <p>"Youssef is exactly the type of player we've been looking for," said head coach Rachid Taoussi. "His experience at the highest level and his understanding of Moroccan football will be invaluable to our squad."</p>
+        
+        <p>"I'm excited to work with him and I'm confident he'll make an immediate impact on our team's performance."</p>
+        
+        <h2>Player's Statement</h2>
+        <p>"I'm thrilled to join ASA," said Amrani. "This is a club with great ambition and I'm looking forward to contributing to the team's success."</p>
+        
+        <p>"The project here is very exciting and I can't wait to get started and meet my new teammates."</p>
+      </div>
+    `,
+    featuredImageUrl: "https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg",
+    author: {
+      name: "Sara Alami",
+      bio: "Transfer news specialist",
+      avatar: null
+    },
+    category: {
+      name: "Transfers",
+      slug: "transfers"
+    },
+    tags: [
+      { name: "Transfer", slug: "transfer" },
+      { name: "New Player", slug: "new-player" },
+      { name: "Midfielder", slug: "midfielder" }
+    ],
+    status: "published",
+    publishedAt: "2024-01-14T15:30:00Z",
+    updatedAt: "2024-01-14T15:30:00Z",
+    views: 1249,
+    commentsCount: 23,
+    readingTime: 3,
+    metaTitle: "New Signing: Youssef Amrani Joins ASA",
+    metaDescription: "The talented midfielder from Raja Casablanca brings experience and skill to strengthen our midfield."
+  }
+];
+
+// Admin posts for the admin panel
+let adminPosts = [
+  {
+    id: 1,
+    title: "ASA Wins Championship Final Against Wydad Casablanca",
+    slug: "asa-wins-championship-final-wydad",
+    author: "Ahmed Benali",
+    status: "published",
+    category: "Match Reports",
+    tags: ["Championship", "Victory", "Wydad"],
+    publishDate: "2024-01-15",
+    views: 2847,
+    comments: 45
+  },
+  {
+    id: 2,
+    title: "New Signing: Youssef Amrani Joins ASA",
+    slug: "new-signing-youssef-amrani",
+    author: "Sara Alami",
+    status: "published",
+    category: "Transfers",
+    tags: ["Transfer", "New Player"],
+    publishDate: "2024-01-14",
+    views: 1249,
+    comments: 23
+  },
+  {
+    id: 3,
+    title: "Advanced TypeScript Techniques",
+    slug: "advanced-typescript-techniques",
+    author: "Mike Chen",
+    status: "draft",
+    category: "Programming",
+    tags: ["TypeScript", "JavaScript"],
+    publishDate: null,
+    views: 0,
+    comments: 0
+  },
+  {
+    id: 4,
+    title: "Building Modern Web Apps",
+    slug: "building-modern-web-apps",
+    author: "Alex Kumar",
+    status: "published", 
+    category: "Development",
+    tags: ["Web Development", "Modern", "Apps"],
+    publishDate: "2024-01-14",
+    views: 2847,
+    comments: 45
+  },
+  {
+    id: 5,
+    title: "CSS Grid Layout Guide",
+    slug: "css-grid-layout-guide",
+    author: "Emma Wilson",
+    status: "scheduled",
+    category: "Design",
+    tags: ["CSS", "Layout", "Grid"],
+    publishDate: "2024-01-20",
+    views: 0,
+    comments: 0
+  }
+];
+
+// Helper functions
+export const getAllPosts = () => {
+  return mockPosts.filter(post => post.status === 'published');
+};
+
+export const getPostBySlug = (slug: string) => {
+  return mockPosts.find(post => post.slug === slug && post.status === 'published');
+};
+
+export const getPostsByCategory = (categorySlug: string) => {
+  return mockPosts.filter(post => 
+    post.status === 'published' && 
+    post.category.slug === categorySlug
+  );
+};
+
+export const getFeaturedPost = () => {
+  return mockPosts.find(post => post.status === 'published') || mockPosts[0];
+};
+
+export const getRecentPosts = (limit: number = 4) => {
+  return mockPosts
+    .filter(post => post.status === 'published')
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, limit);
+};
+
+// Admin functions
+export const getAdminPosts = () => {
+  return adminPosts;
+};
+
+export const createPost = (postData: any) => {
+  const newId = Math.max(...adminPosts.map(p => p.id), ...mockPosts.map(p => p.id)) + 1;
+  
+  // Create admin post
+  const adminPost = {
+    id: newId,
+    title: postData.title,
+    slug: postData.slug,
+    author: "Current User", // In real app, get from auth
+    status: postData.status,
+    category: postData.category,
+    tags: postData.tags,
+    publishDate: postData.status === 'published' ? new Date().toISOString().split('T')[0] : null,
+    views: 0,
+    comments: 0
+  };
+  
+  adminPosts.push(adminPost);
+  
+  // If published, also add to public posts
+  if (postData.status === 'published') {
+    const publicPost = {
+      id: newId,
+      title: postData.title,
+      slug: postData.slug,
+      excerpt: postData.excerpt || `Brief excerpt for ${postData.title}`,
+      content: postData.content || `<p>Content for ${postData.title}</p>`,
+      featuredImageUrl: postData.featuredImage || "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
+      author: {
+        name: "Current User",
+        bio: "Blog author",
+        avatar: null
+      },
+      category: {
+        name: postData.category?.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || "General",
+        slug: postData.category || "general"
+      },
+      tags: postData.tags?.map((tag: string) => ({ name: tag, slug: tag.toLowerCase().replace(/\s+/g, '-') })) || [],
+      status: "published",
+      publishedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      views: 0,
+      commentsCount: 0,
+      readingTime: Math.ceil((postData.content?.length || 1000) / 200),
+      metaTitle: postData.metaTitle || postData.title,
+      metaDescription: postData.metaDescription || postData.excerpt || `Learn about ${postData.title}`
+    };
+    
+    mockPosts.unshift(publicPost); // Add to beginning for latest posts
+  }
+  
+  return adminPost;
+};
+
+export const updatePost = (id: number, postData: any) => {
+  // Update admin post
+  const adminIndex = adminPosts.findIndex(p => p.id === id);
+  if (adminIndex !== -1) {
+    adminPosts[adminIndex] = {
+      ...adminPosts[adminIndex],
+      title: postData.title,
+      slug: postData.slug,
+      status: postData.status,
+      category: postData.category,
+      tags: postData.tags,
+      publishDate: postData.status === 'published' ? 
+        (adminPosts[adminIndex].publishDate || new Date().toISOString().split('T')[0]) : 
+        null
+    };
+  }
+  
+  // Update or create public post
+  const publicIndex = mockPosts.findIndex(p => p.id === id);
+  
+  if (postData.status === 'published') {
+    const publicPost = {
+      id: id,
+      title: postData.title,
+      slug: postData.slug,
+      excerpt: postData.excerpt || `Brief excerpt for ${postData.title}`,
+      content: postData.content || `<p>Content for ${postData.title}</p>`,
+      featuredImageUrl: postData.featuredImage || "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
+      author: {
+        name: "Current User",
+        bio: "Blog author",
+        avatar: null
+      },
+      category: {
+        name: postData.category?.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || "General",
+        slug: postData.category || "general"
+      },
+      tags: postData.tags?.map((tag: string) => ({ name: tag, slug: tag.toLowerCase().replace(/\s+/g, '-') })) || [],
+      status: "published",
+      publishedAt: publicIndex !== -1 ? mockPosts[publicIndex].publishedAt : new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      views: publicIndex !== -1 ? mockPosts[publicIndex].views : 0,
+      commentsCount: publicIndex !== -1 ? mockPosts[publicIndex].commentsCount : 0,
+      readingTime: Math.ceil((postData.content?.length || 1000) / 200),
+      metaTitle: postData.metaTitle || postData.title,
+      metaDescription: postData.metaDescription || postData.excerpt || `Learn about ${postData.title}`
+    };
+    
+    if (publicIndex !== -1) {
+      mockPosts[publicIndex] = publicPost;
+    } else {
+      mockPosts.unshift(publicPost);
+    }
+  } else {
+    // If not published, remove from public posts
+    if (publicIndex !== -1) {
+      mockPosts.splice(publicIndex, 1);
+    }
+  }
+  
+  return adminPosts[adminIndex];
+};
+
+export const deletePost = (id: number) => {
+  // Remove from admin posts
+  const adminIndex = adminPosts.findIndex(p => p.id === id);
+  if (adminIndex !== -1) {
+    adminPosts.splice(adminIndex, 1);
+  }
+  
+  // Remove from public posts
+  const publicIndex = mockPosts.findIndex(p => p.id === id);
+  if (publicIndex !== -1) {
+    mockPosts.splice(publicIndex, 1);
+  }
+};

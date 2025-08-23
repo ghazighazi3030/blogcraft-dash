@@ -46,57 +46,7 @@ import {
   Clock,
   FileText
 } from "lucide-react";
-
-const posts = [
-  {
-    id: 1,
-    title: "Getting Started with React 18",
-    slug: "getting-started-react-18",
-    author: "Sarah Johnson",
-    status: "published",
-    category: "Development",
-    tags: ["React", "JavaScript", "Frontend"],
-    publishDate: "2024-01-15",
-    views: 1249,
-    comments: 23
-  },
-  {
-    id: 2,
-    title: "Advanced TypeScript Techniques",
-    slug: "advanced-typescript-techniques",
-    author: "Mike Chen",
-    status: "draft",
-    category: "Programming",
-    tags: ["TypeScript", "JavaScript"],
-    publishDate: null,
-    views: 0,
-    comments: 0
-  },
-  {
-    id: 3,
-    title: "Building Modern Web Apps",
-    slug: "building-modern-web-apps",
-    author: "Alex Kumar",
-    status: "published", 
-    category: "Development",
-    tags: ["Web Development", "Modern", "Apps"],
-    publishDate: "2024-01-14",
-    views: 2847,
-    comments: 45
-  },
-  {
-    id: 4,
-    title: "CSS Grid Layout Guide",
-    slug: "css-grid-layout-guide",
-    author: "Emma Wilson",
-    status: "scheduled",
-    category: "Design",
-    tags: ["CSS", "Layout", "Grid"],
-    publishDate: "2024-01-20",
-    views: 0,
-    comments: 0
-  }
-];
+import { getAdminPosts, createPost, updatePost, deletePost } from "@/lib/mockData";
 
 const statusColors = {
   published: "bg-success/10 text-success",
@@ -106,6 +56,7 @@ const statusColors = {
 };
 
 export default function Posts() {
+  const [posts, setPosts] = useState(getAdminPosts());
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -158,6 +109,8 @@ export default function Posts() {
 
   const handleBulkAction = (action: string) => {
     console.log(`Bulk action: ${action} on posts:`, selectedPosts);
+    // Refresh posts after bulk action
+    setPosts(getAdminPosts());
     setSelectedPosts([]);
   };
 
@@ -183,6 +136,9 @@ export default function Posts() {
         });
         setShowEditor(true);
       }
+    } else if (action === 'delete') {
+      deletePost(postId);
+      setPosts(getAdminPosts());
     }
   };
 
@@ -193,11 +149,19 @@ export default function Posts() {
 
   const handleSavePost = (postData: any) => {
     console.log('Saving post:', postData);
-    // Here you would typically save to your database
-    // For now, we'll just close the editor
+    
+    if (postData.id) {
+      // Update existing post
+      updatePost(postData.id, postData);
+    } else {
+      // Create new post
+      createPost(postData);
+    }
+    
+    // Refresh posts list
+    setPosts(getAdminPosts());
     setShowEditor(false);
     setEditingPost(null);
-    // You could add a toast notification here
   };
 
   const handleCancelEdit = () => {

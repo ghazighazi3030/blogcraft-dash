@@ -4,83 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Eye, MessageSquare, ArrowRight, TrendingUp } from "lucide-react";
-
-// Mock data - in real app, this would come from Supabase
-const featuredPost = {
-  id: 1,
-  title: "ASA Wins Championship Final Against Wydad Casablanca",
-  slug: "asa-wins-championship-final-wydad",
-  excerpt: "In a thrilling match that went into extra time, ASA secured their first championship title in over a decade with a spectacular 3-2 victory.",
-  content: "Full match report...",
-  featuredImageUrl: "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
-  author: {
-    name: "Ahmed Benali",
-    avatar: null
-  },
-  category: {
-    name: "Match Reports",
-    slug: "match-reports"
-  },
-  tags: ["Championship", "Victory", "Wydad"],
-  publishedAt: "2024-01-15T10:00:00Z",
-  views: 2847,
-  commentsCount: 45
-};
-
-const recentPosts = [
-  {
-    id: 2,
-    title: "New Signing: Youssef Amrani Joins ASA",
-    slug: "new-signing-youssef-amrani",
-    excerpt: "The talented midfielder from Raja Casablanca brings experience and skill to strengthen our midfield.",
-    featuredImageUrl: "https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg",
-    author: { name: "Sara Alami" },
-    category: { name: "Transfers", slug: "transfers" },
-    tags: ["Transfer", "New Player"],
-    publishedAt: "2024-01-14T15:30:00Z",
-    views: 1249,
-    commentsCount: 23
-  },
-  {
-    id: 3,
-    title: "Training Camp Preparation for Next Season",
-    slug: "training-camp-preparation-next-season",
-    excerpt: "Coach Rachid Taoussi outlines the intensive training program designed to prepare the team for upcoming challenges.",
-    featuredImageUrl: "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg",
-    author: { name: "Mohamed Tazi" },
-    category: { name: "Training", slug: "training" },
-    tags: ["Training", "Preparation"],
-    publishedAt: "2024-01-13T09:15:00Z",
-    views: 892,
-    commentsCount: 12
-  },
-  {
-    id: 4,
-    title: "Youth Academy Success Stories",
-    slug: "youth-academy-success-stories",
-    excerpt: "Highlighting the remarkable journey of young talents who have risen through our academy ranks.",
-    featuredImageUrl: "https://images.pexels.com/photos/1618200/pexels-photo-1618200.jpeg",
-    author: { name: "Fatima Zahra" },
-    category: { name: "Youth", slug: "youth" },
-    tags: ["Youth", "Academy"],
-    publishedAt: "2024-01-12T14:20:00Z",
-    views: 654,
-    commentsCount: 8
-  },
-  {
-    id: 5,
-    title: "Stadium Renovation Updates",
-    slug: "stadium-renovation-updates",
-    excerpt: "Latest progress on the stadium modernization project that will enhance fan experience and facilities.",
-    featuredImageUrl: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
-    author: { name: "Hassan Benjelloun" },
-    category: { name: "Infrastructure", slug: "infrastructure" },
-    tags: ["Stadium", "Renovation"],
-    publishedAt: "2024-01-11T11:45:00Z",
-    views: 1156,
-    commentsCount: 19
-  }
-];
+import { getAllPosts, getFeaturedPost, getRecentPosts } from "@/lib/mockData";
 
 const categories = [
   { name: "Match Reports", slug: "match-reports", count: 24 },
@@ -98,6 +22,10 @@ const popularTags = [
 export default function BlogHome() {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  const featuredPost = getFeaturedPost();
+  const recentPosts = getRecentPosts(4);
+  const allPosts = getAllPosts();
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -105,6 +33,12 @@ export default function BlogHome() {
       day: 'numeric'
     });
   };
+
+  if (!featuredPost) {
+    return <div className="text-center py-12">
+      <p className="text-muted-foreground">No published posts available yet.</p>
+    </div>;
+  }
 
   return (
     <div className="space-y-12">
@@ -201,7 +135,7 @@ export default function BlogHome() {
             <h2 className="text-2xl font-bold text-foreground">Latest Posts</h2>
             
             <div className="grid gap-6">
-              {recentPosts.map((post) => (
+              {recentPosts.length > 0 ? recentPosts.map((post) => (
                 <Card key={post.id} className="overflow-hidden hover-lift">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
                     <div className="relative h-48 md:h-full">
@@ -258,7 +192,12 @@ export default function BlogHome() {
                     </div>
                   </div>
                 </Card>
-              ))}
+              )) : (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No recent posts available.</p>
+                  <p className="text-sm text-muted-foreground mt-2">Published posts will appear here.</p>
+                </div>
+              )}
             </div>
 
             {/* Load More Button */}

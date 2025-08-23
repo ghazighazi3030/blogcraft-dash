@@ -16,60 +16,7 @@ import {
   Clock
 } from "lucide-react";
 import { useState } from "react";
-
-// Mock data - in real app, this would come from Supabase based on slug
-const mockPost = {
-  id: 1,
-  title: "ASA Wins Championship Final Against Wydad Casablanca",
-  slug: "asa-wins-championship-final-wydad",
-  content: `
-    <div class="prose prose-lg max-w-none">
-      <p>In a thrilling match that will be remembered for years to come, ASA secured their first championship title in over a decade with a spectacular 3-2 victory against Wydad Casablanca at the Mohammed V Stadium.</p>
-      
-      <h2>Match Highlights</h2>
-      <p>The match started with high intensity from both sides. ASA took an early lead in the 15th minute through a brilliant strike from Youssef Amrani, who curled the ball into the top corner from 25 yards out.</p>
-      
-      <p>Wydad responded quickly, equalizing just 10 minutes later through their captain Badr Benoun. The first half ended 1-1, setting up what would be an unforgettable second half.</p>
-      
-      <h2>Second Half Drama</h2>
-      <p>The second half saw end-to-end action with both teams creating numerous chances. ASA regained the lead in the 65th minute when striker Ahmed Reda capitalized on a defensive error to slot home from close range.</p>
-      
-      <p>Just when it seemed ASA had secured the victory, Wydad struck back in the 88th minute through a controversial penalty, sending the match into extra time.</p>
-      
-      <h2>Extra Time Glory</h2>
-      <p>In the 105th minute of extra time, substitute Mehdi Alaoui became the hero, scoring the winning goal with a spectacular overhead kick that sent the ASA fans into delirium.</p>
-      
-      <p>This victory marks ASA's return to the top of Moroccan football and validates the hard work put in by coach Rachid Taoussi and his squad throughout the season.</p>
-      
-      <h2>What This Means</h2>
-      <p>This championship win is more than just a trophy – it represents the culmination of years of rebuilding and investment in youth development. The victory also secures ASA's place in next season's CAF Champions League.</p>
-    </div>
-  `,
-  excerpt: "In a thrilling match that went into extra time, ASA secured their first championship title in over a decade with a spectacular 3-2 victory.",
-  featuredImageUrl: "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
-  author: {
-    name: "Ahmed Benali",
-    bio: "Sports journalist covering ASA for over 10 years",
-    avatar: null
-  },
-  category: {
-    name: "Match Reports",
-    slug: "match-reports"
-  },
-  tags: [
-    { name: "Championship", slug: "championship" },
-    { name: "Victory", slug: "victory" },
-    { name: "Wydad", slug: "wydad" },
-    { name: "Final", slug: "final" }
-  ],
-  publishedAt: "2024-01-15T10:00:00Z",
-  updatedAt: "2024-01-15T10:00:00Z",
-  views: 2847,
-  commentsCount: 45,
-  readingTime: 5,
-  metaTitle: "ASA Wins Championship Final Against Wydad Casablanca - Historic Victory",
-  metaDescription: "ASA secured their first championship title in over a decade with a spectacular 3-2 victory against Wydad Casablanca in extra time."
-};
+import { getPostBySlug, getRecentPosts } from "@/lib/mockData";
 
 const mockComments = [
   {
@@ -98,23 +45,6 @@ const mockComments = [
   }
 ];
 
-const relatedPosts = [
-  {
-    id: 2,
-    title: "New Signing: Youssef Amrani Joins ASA",
-    slug: "new-signing-youssef-amrani",
-    featuredImageUrl: "https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg",
-    publishedAt: "2024-01-14T15:30:00Z"
-  },
-  {
-    id: 3,
-    title: "Training Camp Preparation for Next Season",
-    slug: "training-camp-preparation-next-season",
-    featuredImageUrl: "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg",
-    publishedAt: "2024-01-13T09:15:00Z"
-  }
-];
-
 export default function BlogPost() {
   const { slug } = useParams();
   const [liked, setLiked] = useState(false);
@@ -123,6 +53,9 @@ export default function BlogPost() {
     email: "",
     content: ""
   });
+
+  const post = getPostBySlug(slug || '');
+  const relatedPosts = getRecentPosts(2);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -154,6 +87,18 @@ export default function BlogPost() {
     }
   };
 
+  if (!post) {
+    return (
+      <div className="text-center py-12">
+        <h1 className="text-2xl font-bold text-foreground mb-4">Post Not Found</h1>
+        <p className="text-muted-foreground">The post you're looking for doesn't exist or hasn't been published yet.</p>
+        <Link to="/blog" className="mt-4 inline-block">
+          <Button>Back to Blog</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Back Button */}
@@ -169,8 +114,8 @@ export default function BlogPost() {
         {/* Featured Image */}
         <div className="relative h-64 md:h-96 rounded-lg overflow-hidden">
           <img
-            src={mockPost.featuredImageUrl}
-            alt={mockPost.title}
+            src={post.featuredImageUrl}
+            alt={post.title}
             className="w-full h-full object-cover"
           />
         </div>
@@ -178,28 +123,28 @@ export default function BlogPost() {
         {/* Article Meta */}
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <Badge variant="secondary">{mockPost.category.name}</Badge>
+            <Badge variant="secondary">{post.category.name}</Badge>
             <div className="flex items-center space-x-1">
               <Calendar className="h-4 w-4" />
-              <span>{formatDate(mockPost.publishedAt)}</span>
+              <span>{formatDate(post.publishedAt)}</span>
             </div>
             <div className="flex items-center space-x-1">
               <Clock className="h-4 w-4" />
-              <span>{mockPost.readingTime} min read</span>
+              <span>{post.readingTime} min read</span>
             </div>
             <div className="flex items-center space-x-1">
               <Eye className="h-4 w-4" />
-              <span>{mockPost.views.toLocaleString()} views</span>
+              <span>{post.views.toLocaleString()} views</span>
             </div>
             <div className="flex items-center space-x-1">
               <MessageSquare className="h-4 w-4" />
-              <span>{mockPost.commentsCount} comments</span>
+              <span>{post.commentsCount} comments</span>
             </div>
           </div>
 
           {/* Title */}
           <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            {mockPost.title}
+            {post.title}
           </h1>
 
           {/* Author & Actions */}
@@ -209,8 +154,8 @@ export default function BlogPost() {
                 <User className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="font-medium text-foreground">{mockPost.author.name}</p>
-                <p className="text-sm text-muted-foreground">{mockPost.author.bio}</p>
+                <p className="font-medium text-foreground">{post.author.name}</p>
+                <p className="text-sm text-muted-foreground">{post.author.bio}</p>
               </div>
             </div>
 
@@ -236,7 +181,7 @@ export default function BlogPost() {
         <Card className="p-8">
           <div 
             className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: mockPost.content }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </Card>
 
@@ -244,7 +189,7 @@ export default function BlogPost() {
         <div className="flex items-center space-x-2">
           <Tag className="h-4 w-4 text-muted-foreground" />
           <div className="flex flex-wrap gap-2">
-            {mockPost.tags.map((tag) => (
+            {post.tags.map((tag) => (
               <Link key={tag.slug} to={`/blog/tag/${tag.slug}`}>
                 <Badge variant="outline" className="hover:bg-primary hover:text-primary-foreground transition-colors">
                   {tag.name}
@@ -315,23 +260,23 @@ export default function BlogPost() {
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Related Posts</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {relatedPosts.map((post) => (
-            <Card key={post.id} className="overflow-hidden hover-lift">
+          {relatedPosts.slice(0, 2).map((relatedPost) => (
+            <Card key={relatedPost.id} className="overflow-hidden hover-lift">
               <div className="relative h-48">
                 <img
-                  src={post.featuredImageUrl}
-                  alt={post.title}
+                  src={relatedPost.featuredImageUrl}
+                  alt={relatedPost.title}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="p-4">
                 <h3 className="font-semibold text-foreground hover:text-primary transition-colors mb-2">
-                  <Link to={`/blog/post/${post.slug}`}>
-                    {post.title}
+                  <Link to={`/blog/post/${relatedPost.slug}`}>
+                    {relatedPost.title}
                   </Link>
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(post.publishedAt)}
+                  {formatDate(relatedPost.publishedAt)}
                 </p>
               </div>
             </Card>
