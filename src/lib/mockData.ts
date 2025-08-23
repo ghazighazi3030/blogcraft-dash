@@ -168,6 +168,14 @@ let adminPosts = [
   }
 ];
 
+const statusColors = {
+  published: "bg-success/10 text-success",
+  draft: "bg-warning/10 text-warning",
+  scheduled: "bg-accent/10 text-accent",
+  archived: "bg-muted text-muted-foreground",
+  rejected: "bg-destructive/10 text-destructive"
+};
+
 // Helper functions
 export const getAllPosts = () => {
   return mockPosts.filter(post => post.status === 'published');

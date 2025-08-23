@@ -139,16 +139,12 @@ export default function PostEditor({ post, onSave, onCancel }: PostEditorProps) 
   };
 
   const handlePreview = () => {
-    // Create a temporary preview URL or open in new tab
     const previewData = {
       ...formData,
       id: post?.id || 'preview'
     };
     
-    // Store preview data in sessionStorage for preview page
     sessionStorage.setItem('previewPost', JSON.stringify(previewData));
-    
-    // Open preview in new tab
     window.open('/blog/post/preview', '_blank');
   };
 

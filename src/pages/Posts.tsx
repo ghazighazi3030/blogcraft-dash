@@ -315,6 +315,12 @@ export default function Posts() {
                   <SelectItem value="Development">Development</SelectItem>
                   <SelectItem value="Programming">Programming</SelectItem>
                   <SelectItem value="Design">Design</SelectItem>
+                  <SelectItem value="Match Reports">Match Reports</SelectItem>
+                  <SelectItem value="Transfers">Transfers</SelectItem>
+                  <SelectItem value="Training">Training</SelectItem>
+                  <SelectItem value="Youth Academy">Youth Academy</SelectItem>
+                  <SelectItem value="Infrastructure">Infrastructure</SelectItem>
+                  <SelectItem value="Community">Community</SelectItem>
                 </SelectContent>
               </Select>
               
