@@ -1,5 +1,42 @@
 // Mock data store for posts - In real app, this would be Supabase
 let mockPosts = [
+// Categories data
+let mockCategories = [
+  {
+    id: 1,
+    name: "Match Reports",
+    slug: "match-reports",
+    description: "Detailed coverage of ASA matches, including analysis and highlights",
+    postsCount: 24,
+    color: "#dc2626",
+    isActive: true,
+    createdAt: "2023-08-15T10:00:00Z",
+    updatedAt: "2024-01-15T10:00:00Z"
+  },
+  {
+    id: 2,
+    name: "Transfers",
+    slug: "transfers",
+    description: "Latest news on player transfers, signings, and contract updates",
+    postsCount: 18,
+    color: "#2563eb",
+    isActive: true,
+    createdAt: "2023-08-20T10:00:00Z",
+    updatedAt: "2024-01-14T10:00:00Z"
+  },
+  {
+    id: 3,
+    name: "Training",
+    slug: "training",
+    description: "Behind-the-scenes look at training sessions and preparation",
+    postsCount: 15,
+    color: "#16a34a",
+    isActive: true,
+    createdAt: "2023-09-01T10:00:00Z",
+    updatedAt: "2024-01-12T10:00:00Z"
+  }
+];
+
   {
     id: 1,
     title: "ASA Wins Championship Final Against Wydad Casablanca",
@@ -337,4 +374,52 @@ export const deletePost = (id: number) => {
   if (publicIndex !== -1) {
     mockPosts.splice(publicIndex, 1);
   }
+};
+
+// Categories functions
+export const getAllCategories = () => {
+  return mockCategories;
+};
+
+export const getActiveCategories = () => {
+  return mockCategories.filter(cat => cat.isActive);
+};
+
+export const getCategoryBySlug = (slug: string) => {
+  return mockCategories.find(cat => cat.slug === slug);
+};
+
+export const createCategory = (categoryData: any) => {
+  const newId = Math.max(...mockCategories.map(c => c.id)) + 1;
+  const category = {
+    id: newId,
+    ...categoryData,
+    postsCount: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  mockCategories.push(category);
+  return category;
+};
+
+export const updateCategory = (id: number, categoryData: any) => {
+  const index = mockCategories.findIndex(c => c.id === id);
+  if (index !== -1) {
+    mockCategories[index] = {
+      ...mockCategories[index],
+      ...categoryData,
+      updatedAt: new Date().toISOString()
+    };
+    return mockCategories[index];
+  }
+  return null;
+};
+
+export const deleteCategory = (id: number) => {
+  const index = mockCategories.findIndex(c => c.id === id);
+  if (index !== -1) {
+    mockCategories.splice(index, 1);
+    return true;
+  }
+  return false;
 };
