@@ -89,6 +89,10 @@ export default function DashboardLayout() {
                 <a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = item.href;
+                  }}
                   className={cn(
                     "group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-custom",
                     active

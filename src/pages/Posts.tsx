@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PostEditor from "@/components/admin/PostEditor";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -109,6 +110,8 @@ export default function Posts() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [selectedPosts, setSelectedPosts] = useState<number[]>([]);
+  const [showEditor, setShowEditor] = useState(false);
+  const [editingPost, setEditingPost] = useState<any>(null);
 
   const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -159,8 +162,58 @@ export default function Posts() {
 
   const handlePostAction = (action: string, postId: number) => {
     console.log(`Action: ${action} on post:`, postId);
+    if (action === 'edit') {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        setEditingPost({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: `Brief excerpt for ${post.title}`,
+          content: `<h2>Welcome to ${post.title}</h2><p>This is the main content of the post...</p>`,
+          status: post.status,
+          category: post.category.toLowerCase().replace(/\s+/g, '-'),
+          tags: post.tags,
+          featuredImage: "",
+          scheduledAt: post.status === 'scheduled' ? post.publishDate + 'T10:00' : "",
+          metaTitle: post.title,
+          metaDescription: `Learn about ${post.title}`,
+          metaKeywords: post.tags
+        });
+        setShowEditor(true);
+      }
+    }
   };
 
+  const handleCreatePost = () => {
+    setEditingPost(null);
+    setShowEditor(true);
+  };
+
+  const handleSavePost = (postData: any) => {
+    console.log('Saving post:', postData);
+    // Here you would typically save to your database
+    // For now, we'll just close the editor
+    setShowEditor(false);
+    setEditingPost(null);
+    // You could add a toast notification here
+  };
+
+  const handleCancelEdit = () => {
+    setShowEditor(false);
+    setEditingPost(null);
+  };
+
+  // If showing editor, render the editor instead of the posts list
+  if (showEditor) {
+    return (
+      <PostEditor
+        post={editingPost}
+        onSave={handleSavePost}
+        onCancel={handleCancelEdit}
+      />
+    );
+  }
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -170,6 +223,7 @@ export default function Posts() {
           <p className="mt-2 text-muted-foreground">Manage your blog posts and content.</p>
         </div>
         <Button className="mt-4 sm:mt-0" size="lg">
+        <Button className="mt-4 sm:mt-0" size="lg" onClick={handleCreatePost}>
           <Plus className="mr-2 h-4 w-4" />
           New Post
         </Button>
@@ -433,7 +487,7 @@ export default function Posts() {
               : "Get started by creating your first post"
             }
           </p>
-          <Button>
+          <Button onClick={handleCreatePost}>
             <Plus className="mr-2 h-4 w-4" />
             Create New Post
           </Button>

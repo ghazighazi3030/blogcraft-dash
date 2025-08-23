@@ -49,6 +49,9 @@ const categories = [
   { value: "youth", label: "Youth Academy" },
   { value: "infrastructure", label: "Infrastructure" },
   { value: "community", label: "Community" }
+  { value: "development", label: "Development" },
+  { value: "programming", label: "Programming" },
+  { value: "design", label: "Design" }
 ];
 
 export default function PostEditor({ post, onSave, onCancel }: PostEditorProps) {
