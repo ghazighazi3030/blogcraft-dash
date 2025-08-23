@@ -15,6 +15,7 @@ import BlogPost from "./pages/blog/BlogPost";
 import BlogCategories from "./pages/blog/BlogCategories";
 import BlogCategoryPage from "./pages/blog/BlogCategoryPage";
 import BlogAbout from "./pages/blog/BlogAbout";
+import BlogPreview from "./pages/blog/BlogPreview";
 import CommentsManager from "./components/admin/CommentsManager";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/blog" element={<PublicLayout />}>
             <Route index element={<BlogHome />} />
             <Route path="post/:slug" element={<BlogPost />} />
+            <Route path="post/preview" element={<BlogPreview />} />
             <Route path="categories" element={<BlogCategories />} />
             <Route path="category/:slug" element={<BlogCategoryPage />} />
             <Route path="about" element={<BlogAbout />} />
