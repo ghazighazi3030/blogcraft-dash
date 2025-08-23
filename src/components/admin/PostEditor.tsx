@@ -48,7 +48,7 @@ const categories = [
   { value: "training", label: "Training" },
   { value: "youth", label: "Youth Academy" },
   { value: "infrastructure", label: "Infrastructure" },
-  { value: "community", label: "Community" }
+  { value: "community", label: "Community" },
   { value: "development", label: "Development" },
   { value: "programming", label: "Programming" },
   { value: "design", label: "Design" }
