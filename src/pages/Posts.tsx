@@ -43,7 +43,8 @@ import {
   Copy,
   ExternalLink,
   Archive,
-  Clock
+  Clock,
+  FileText
 } from "lucide-react";
 
 const posts = [
@@ -222,7 +223,6 @@ export default function Posts() {
           <h1 className="text-3xl font-bold text-foreground">Posts</h1>
           <p className="mt-2 text-muted-foreground">Manage your blog posts and content.</p>
         </div>
-        <Button className="mt-4 sm:mt-0" size="lg">
         <Button className="mt-4 sm:mt-0" size="lg" onClick={handleCreatePost}>
           <Plus className="mr-2 h-4 w-4" />
           New Post

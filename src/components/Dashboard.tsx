@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from "recharts";
+import QuickActions from "@/components/admin/QuickActions";
 
 const statsCards = [
   {
@@ -389,25 +390,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
-            <div className="space-y-3">
-              {quickActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <Button 
-                    key={action.title}
-                    variant={action.color === 'primary' ? 'default' : 'outline'}
-                    className="w-full justify-start"
-                    size="lg"
-                  >
-                    <Icon className="mr-3 h-4 w-4" />
-                    {action.title}
-                  </Button>
-                );
-              })}
-            </div>
-          </Card>
+          <QuickActions />
 
           {/* Today's Summary */}
           <Card className="p-6">
