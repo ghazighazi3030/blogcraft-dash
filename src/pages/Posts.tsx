@@ -136,9 +136,93 @@ export default function Posts() {
         });
         setShowEditor(true);
       }
+    } else if (action === 'preview') {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        // Create preview data
+        const previewData = {
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: `Brief excerpt for ${post.title}`,
+          content: `<h2>Welcome to ${post.title}</h2><p>This is the main content of the post...</p>`,
+          status: post.status,
+          category: post.category.toLowerCase().replace(/\s+/g, '-'),
+          tags: post.tags,
+          featuredImage: "https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg",
+          scheduledAt: post.publishDate ? post.publishDate + 'T10:00' : "",
+          metaTitle: post.title,
+          metaDescription: `Learn about ${post.title}`,
+          metaKeywords: post.tags
+        };
+        
+        // Store preview data and open in new tab
+        sessionStorage.setItem('previewPost', JSON.stringify(previewData));
+        window.open('/blog/post/preview', '_blank');
+      }
+    } else if (action === 'duplicate') {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        const duplicatedPost = {
+          title: `${post.title} (Copy)`,
+          slug: `${post.slug}-copy`,
+          excerpt: `Brief excerpt for ${post.title} (Copy)`,
+          content: `<h2>Welcome to ${post.title} (Copy)</h2><p>This is the main content of the post...</p>`,
+          status: 'draft',
+          category: post.category.toLowerCase().replace(/\s+/g, '-'),
+          tags: post.tags,
+          featuredImage: "",
+          scheduledAt: "",
+          metaTitle: `${post.title} (Copy)`,
+          metaDescription: `Learn about ${post.title} (Copy)`,
+          metaKeywords: post.tags
+        };
+        
+        // Create the duplicated post
+        createPost(duplicatedPost);
+        setPosts(getAdminPosts());
+      }
+    } else if (action === 'schedule') {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        // Set post to scheduled status with future date
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const scheduledDate = tomorrow.toISOString().split('T')[0];
+        
+        const scheduledPost = {
+          ...post,
+          status: 'scheduled',
+          scheduledAt: scheduledDate + 'T10:00'
+        };
+        
+        updatePost(postId, scheduledPost);
+        setPosts(getAdminPosts());
+      }
+    } else if (action === 'archive') {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        // Change status to archived
+        const archivedPost = {
+          ...post,
+          status: 'archived'
+        };
+        
+        updatePost(postId, archivedPost);
+        setPosts(getAdminPosts());
+      }
     } else if (action === 'delete') {
       deletePost(postId);
       setPosts(getAdminPosts());
+    } else if (action === 'view') {
+      const post = posts.find(p => p.id === postId);
+      if (post && post.status === 'published') {
+        // Open published post in new tab
+        window.open(`/blog/post/${post.slug}`, '_blank');
+      } else {
+        // Show preview for unpublished posts
+        handlePostAction('preview', postId);
+      }
     }
   };
 
