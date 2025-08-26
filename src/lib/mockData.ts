@@ -1,5 +1,5 @@
 // Mock data store for posts - In real app, this would be Supabase
-let mockPosts = [
+
 // Categories data
 let mockCategories = [
   {
@@ -34,9 +34,43 @@ let mockCategories = [
     isActive: true,
     createdAt: "2023-09-01T10:00:00Z",
     updatedAt: "2024-01-12T10:00:00Z"
+  },
+  {
+    id: 4,
+    name: "Programming",
+    slug: "programming",
+    description: "Programming tutorials and guides",
+    postsCount: 8,
+    color: "#7c3aed",
+    isActive: true,
+    createdAt: "2023-09-05T10:00:00Z",
+    updatedAt: "2024-01-10T10:00:00Z"
+  },
+  {
+    id: 5,
+    name: "Development",
+    slug: "development",
+    description: "Web development and software engineering",
+    postsCount: 12,
+    color: "#ea580c",
+    isActive: true,
+    createdAt: "2023-09-10T10:00:00Z",
+    updatedAt: "2024-01-08T10:00:00Z"
+  },
+  {
+    id: 6,
+    name: "Design",
+    slug: "design",
+    description: "UI/UX design and visual design principles",
+    postsCount: 6,
+    color: "#db2777",
+    isActive: true,
+    createdAt: "2023-09-15T10:00:00Z",
+    updatedAt: "2024-01-05T10:00:00Z"
   }
 ];
 
+let mockPosts = [
   {
     id: 1,
     title: "ASA Wins Championship Final Against Wydad Casablanca",
@@ -376,6 +410,63 @@ export const deletePost = (id: number) => {
   }
 };
 
+export const archivePost = (id: number) => {
+  // Update admin post status
+  const adminIndex = adminPosts.findIndex(p => p.id === id);
+  if (adminIndex !== -1) {
+    adminPosts[adminIndex].status = 'archived';
+    adminPosts[adminIndex].publishDate = null;
+  }
+  
+  // Remove from public posts
+  const publicIndex = mockPosts.findIndex(p => p.id === id);
+  if (publicIndex !== -1) {
+    mockPosts.splice(publicIndex, 1);
+  }
+  
+  return adminPosts[adminIndex];
+};
+
+export const duplicatePost = (id: number) => {
+  const adminPost = adminPosts.find(p => p.id === id);
+  if (!adminPost) return null;
+  
+  const newId = Math.max(...adminPosts.map(p => p.id), ...mockPosts.map(p => p.id)) + 1;
+  const duplicatedPost = {
+    ...adminPost,
+    id: newId,
+    title: `${adminPost.title} (Copy)`,
+    slug: `${adminPost.slug}-copy`,
+    status: 'draft',
+    publishDate: null,
+    views: 0,
+    comments: 0
+  };
+  
+  adminPosts.push(duplicatedPost);
+  return duplicatedPost;
+};
+
+export const schedulePost = (id: number) => {
+  const adminIndex = adminPosts.findIndex(p => p.id === id);
+  if (adminIndex !== -1) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(10, 0, 0, 0);
+    
+    adminPosts[adminIndex].status = 'scheduled';
+    adminPosts[adminIndex].publishDate = tomorrow.toISOString().split('T')[0];
+  }
+  
+  // Remove from public posts if it was published
+  const publicIndex = mockPosts.findIndex(p => p.id === id);
+  if (publicIndex !== -1) {
+    mockPosts.splice(publicIndex, 1);
+  }
+  
+  return adminPosts[adminIndex];
+};
+
 // Categories functions
 export const getAllCategories = () => {
   return mockCategories;
@@ -422,4 +513,48 @@ export const deleteCategory = (id: number) => {
     return true;
   }
   return false;
+};
+
+export const duplicateCategory = (id: number) => {
+  const category = mockCategories.find(c => c.id === id);
+  if (!category) return null;
+  
+  const newId = Math.max(...mockCategories.map(c => c.id)) + 1;
+  const duplicatedCategory = {
+    ...category,
+    id: newId,
+    name: `${category.name} (Copy)`,
+    slug: `${category.slug}-copy`,
+    postsCount: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  
+  mockCategories.push(duplicatedCategory);
+  return duplicatedCategory;
+};
+
+export const toggleCategoryStatus = (id: number) => {
+  const index = mockCategories.findIndex(c => c.id === id);
+  if (index !== -1) {
+    mockCategories[index].isActive = !mockCategories[index].isActive;
+    mockCategories[index].updatedAt = new Date().toISOString();
+    return mockCategories[index];
+  }
+  return null;
+};
+
+export const bulkUpdateCategories = (ids: number[], action: 'activate' | 'deactivate' | 'delete') => {
+  if (action === 'delete') {
+    ids.forEach(id => deleteCategory(id));
+  } else {
+    const isActive = action === 'activate';
+    ids.forEach(id => {
+      const index = mockCategories.findIndex(c => c.id === id);
+      if (index !== -1) {
+        mockCategories[index].isActive = isActive;
+        mockCategories[index].updatedAt = new Date().toISOString();
+      }
+    });
+  }
 };
