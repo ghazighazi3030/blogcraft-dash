@@ -52,7 +52,8 @@ const statusColors = {
   published: "bg-success/10 text-success",
   draft: "bg-warning/10 text-warning",
   scheduled: "bg-accent/10 text-accent",
-  archived: "bg-muted text-muted-foreground"
+  archived: "bg-muted text-muted-foreground",
+  rejected: "bg-destructive/10 text-destructive"
 };
 
 export default function Posts() {
@@ -163,52 +164,22 @@ export default function Posts() {
     } else if (action === 'duplicate') {
       const post = posts.find(p => p.id === postId);
       if (post) {
-        const duplicatedPost = {
-          title: `${post.title} (Copy)`,
-          slug: `${post.slug}-copy`,
-          excerpt: `Brief excerpt for ${post.title} (Copy)`,
-          content: `<h2>Welcome to ${post.title} (Copy)</h2><p>This is the main content of the post...</p>`,
-          status: 'draft',
-          category: post.category.toLowerCase().replace(/\s+/g, '-'),
-          tags: post.tags,
-          featuredImage: "",
-          scheduledAt: "",
-          metaTitle: `${post.title} (Copy)`,
-          metaDescription: `Learn about ${post.title} (Copy)`,
-          metaKeywords: post.tags
-        };
-        
-        // Create the duplicated post
-        createPost(duplicatedPost);
+        // Use the duplicate function from mockData
+        duplicatePost(postId);
         setPosts(getAdminPosts());
       }
     } else if (action === 'schedule') {
       const post = posts.find(p => p.id === postId);
       if (post) {
-        // Set post to scheduled status with future date
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const scheduledDate = tomorrow.toISOString().split('T')[0];
-        
-        const scheduledPost = {
-          ...post,
-          status: 'scheduled',
-          scheduledAt: scheduledDate + 'T10:00'
-        };
-        
-        updatePost(postId, scheduledPost);
+        // Use the schedule function from mockData
+        schedulePost(postId);
         setPosts(getAdminPosts());
       }
     } else if (action === 'archive') {
       const post = posts.find(p => p.id === postId);
       if (post) {
-        // Change status to archived
-        const archivedPost = {
-          ...post,
-          status: 'archived'
-        };
-        
-        updatePost(postId, archivedPost);
+        // Use the archive function from mockData
+        archivePost(postId);
         setPosts(getAdminPosts());
       }
     } else if (action === 'delete') {
@@ -303,6 +274,7 @@ export default function Posts() {
                   <SelectItem value="published">Published</SelectItem>
                   <SelectItem value="draft">Draft</SelectItem>
                   <SelectItem value="scheduled">Scheduled</SelectItem>
+                  <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
               
