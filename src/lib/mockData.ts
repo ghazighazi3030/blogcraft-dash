@@ -289,7 +289,7 @@ export const createPost = (postData: any) => {
     slug: postData.slug,
     author: "Current User", // In real app, get from auth
     status: postData.status,
-    category: postData.category,
+    category: postData.category?.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || "General",
     tags: postData.tags,
     publishDate: postData.status === 'published' ? new Date().toISOString().split('T')[0] : null,
     views: 0,
@@ -313,7 +313,7 @@ export const createPost = (postData: any) => {
         avatar: null
       },
       category: {
-        name: postData.category?.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || "General",
+        name: postData.category?.replace(/[-_]/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || "General",
         slug: postData.category || "general"
       },
       tags: postData.tags?.map((tag: string) => ({ name: tag, slug: tag.toLowerCase().replace(/\s+/g, '-') })) || [],

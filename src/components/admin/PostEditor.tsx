@@ -124,17 +124,30 @@ export default function PostEditor({ post, onSave, onCancel }: PostEditorProps) 
   };
 
   const handleSave = (status: string) => {
+    // Ensure required fields are filled
+    if (!formData.title.trim()) {
+      alert('Please enter a post title');
+      return;
+    }
+    
+    if (!formData.content.trim()) {
+      alert('Please enter post content');
+      return;
+    }
+    
     const postData = {
       ...formData,
       status,
-      id: post?.id
+      id: post?.id,
+      // Ensure we have proper values for required fields
+      excerpt: formData.excerpt || `Brief excerpt for ${formData.title}`,
+      content: formData.content || `<h2>${formData.title}</h2><p>Content for this post...</p>`,
+      category: formData.category || 'general'
     };
     
     console.log('Saving post with data:', postData);
     onSave({
-      ...formData,
-      status,
-      id: post?.id
+      ...postData,
     });
   };
 
