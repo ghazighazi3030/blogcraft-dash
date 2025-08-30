@@ -9,12 +9,20 @@ const navigation = [
   { name: 'Home', href: '/blog', icon: Home },
   { name: 'Categories', href: '/blog/categories', icon: Tag },
   { name: 'About', href: '/blog/about', icon: User },
+  { name: 'Search', href: '/blog/search', icon: Search },
 ];
 
 export default function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = `/blog/search?q=${encodeURIComponent(searchQuery.trim())}`;
+    }
+  };
 
   const isActive = (href: string) => {
     if (href === '/blog') {
@@ -61,7 +69,7 @@ export default function PublicLayout() {
 
             {/* Search Bar */}
             <div className="hidden md:flex items-center space-x-4">
-              <div className="relative">
+              <form onSubmit={handleSearch} className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="search"
@@ -70,7 +78,7 @@ export default function PublicLayout() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 w-64"
                 />
-              </div>
+              </form>
               <Link to="/admin">
                 <Button variant="outline" size="sm">
                   Admin
@@ -95,7 +103,7 @@ export default function PublicLayout() {
           <div className="md:hidden border-t border-border bg-background">
             <div className="container mx-auto px-4 py-4 space-y-4">
               {/* Mobile Search */}
-              <div className="relative">
+              <form onSubmit={handleSearch} className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="search"
@@ -104,7 +112,7 @@ export default function PublicLayout() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
-              </div>
+              </form>
 
               {/* Mobile Navigation Links */}
               <nav className="space-y-2">

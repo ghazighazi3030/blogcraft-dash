@@ -16,6 +16,8 @@ import BlogCategories from "./pages/blog/BlogCategories";
 import BlogCategoryPage from "./pages/blog/BlogCategoryPage";
 import BlogAbout from "./pages/blog/BlogAbout";
 import BlogPreview from "./pages/blog/BlogPreview";
+import BlogSearch from "./pages/blog/BlogSearch";
+import BlogTagPage from "./pages/blog/BlogTagPage";
 import CommentsManager from "./components/admin/CommentsManager";
 import Categories from "./pages/Categories";
 
@@ -33,8 +35,10 @@ const App = () => (
             <Route index element={<BlogHome />} />
             <Route path="post/:slug" element={<BlogPost />} />
             <Route path="post/preview" element={<BlogPreview />} />
+            <Route path="search" element={<BlogSearch />} />
             <Route path="categories" element={<BlogCategories />} />
             <Route path="category/:slug" element={<BlogCategoryPage />} />
+            <Route path="tag/:slug" element={<BlogTagPage />} />
             <Route path="about" element={<BlogAbout />} />
           </Route>
           
